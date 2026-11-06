@@ -127,3 +127,47 @@ while queue_length > 0:
     print(f"Event #{current_event_id}: Kritisches Auth-Event analysiert und gespeichert.")
 
 print("Warteschlange komplett abgearbeitet.")
+
+
+# --- Security collections: Lists & Indexing ---
+blocked_ips: list[str] = ["192.168.1.50", "10.0.0.99", "172.16.0.23"]
+
+# Eine neue verdächtige IP dynamisch sperren (.append)
+blocked_ips.append("192.168.1.105")
+
+print(f"\n[Firewall] Gesamtzahl gesperrter IPs : {len(blocked_ips)}")
+print(f"Erste gesperrte IP (Index 0)        : {blocked_ips[0]}")
+print(f"Zuletzt gesperrte IP (Index -1)     : {blocked_ips[-1]}")
+
+
+# --- Security Sessions: Dictionaries & Safe Access ---
+auth_session: dict[str, str] = {
+    "sesson_id": "sess-9912-xyz",
+    "username": "lead_developer",
+    "mfa_status": "verified",
+}
+
+# Neuen Schlüssel dynamisch hinzufügen
+auth_session["client_ip"] = "192.168.1.105"
+
+print(f"\n[Session Manager] Benutzer          : {auth_session['username']}")
+print(f"Sicherer Zugriff mit .get('scope')  : {auth_session.get('scope')}")
+
+
+# --- Memory References: The Mutability Trap ---
+primary_whitelist: list[str] = ["admin-pc", "gateway-01"]
+
+# Falsche Kopie (Referenz teilt sich denselben Speicherbereich!):
+mirrored_whitelist: list[str] = primary_whitelist
+mirrored_whitelist.append("hacker-laptop")
+
+print("\n--- Mutability-Falle ---")
+print(f"Mirrored Whitelist  : {mirrored_whitelist}")
+print(f"Primary Whitelist   : {primary_whitelist}  <-- Wurde ungewollt manipuliert!")
+
+# Echte Kopie (Unabhängiger Speicherplatz mit .copy()):
+safe_whitelist: list[str] = primary_whitelist.copy()
+safe_whitelist.append("new-secure-node")
+
+print(f"Safe Whitelist      : {safe_whitelist}")
+print(f"Primary Whitelist   : {primary_whitelist}  <-- Bleibt sauber geschuetzt!")
