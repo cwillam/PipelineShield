@@ -67,3 +67,24 @@ if not raw_magic_token:
     print("Security Warning: Kein Athentifizierungs-Token übergeben (Falsy erkannt).")
 else:
     print(f"Token empfangen: {raw_magic_token} (Truthy erkannt).")
+
+
+# --- Token Validation Function (Guard Clause Pattern) ---
+def validate_magic_token(token: str, min_length: int = 16) -> bool:
+    # Guard 1: Ist das Token leer oder None? (Falsy-Check)
+    if not token:
+        return False
+
+    # Guard 2: Erfüllt das token die Mindestlänge?
+    if len(token) < min_length:
+        return False
+
+    # Wenn alle Wächter passiert wurden:
+    return True
+
+# Testaufrufe der Funktion mit Argumenten:
+test_token_invalid: str = "short-token"
+test_token_valid: str = "secure-magic-link-token-998877"
+
+print(f"Check '{test_token_invalid}' -> Gültig? {validate_magic_token(test_token_invalid)}")
+print(f"Check '{test_token_valid}'   -> Gültig? {validate_magic_token(test_token_valid)}")
