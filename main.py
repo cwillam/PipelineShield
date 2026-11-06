@@ -88,3 +88,42 @@ test_token_valid: str = "secure-magic-link-token-998877"
 
 print(f"Check '{test_token_invalid}' -> Gültig? {validate_magic_token(test_token_invalid)}")
 print(f"Check '{test_token_valid}'   -> Gültig? {validate_magic_token(test_token_valid)}")
+
+
+# --- Service connection Retry Loop (for-in-range & break) ---
+max_retries: int = 3
+service_connected: bool = False
+
+print("\n[Connection Manager] Starte Verbindungsaufbau zum Auth-Backend...")
+
+for attempt in range(1, max_retries + 1):
+    print(f"Verbindungsversuch {attempt} von {max_retries}...")
+
+    # Wir simulieren: Beim 2. Versuch ist die Verbindung erfolgreich!
+    if attempt == 2:
+        service_connected = True
+        print("-> Verbindung erfolgreich hergestellt! (Schleife wird per 'break' beendet)")
+        break
+else:
+    # Dieser 'else'-Zweig gehört zur for-Schleife und wird NUR ausgeführt, wenn KEIN break kam!
+    print(f"Status nach Schleife: Verbunden ={service_connected}")
+
+
+# --- Event Queue Processing (while-loop & continue) ---
+queue_length: int = 4
+
+print("\n[Event Processor] Verarbeite Sicherheits-Warteschlange...")
+
+while queue_length > 0:
+    # Event-Nummer merken und Queue verkleinern
+    current_event_id: int = queue_length
+    queue_length -= 1 # WICHTIG: Zähler verringer, um Endlosschleife zu verhindern!
+
+    # Event 2 ist nur ein harmloser Netzwerk-Ping -> Überspringen mit continue!
+    if current_event_id == 2:
+        print(f"Event #{current_event_id}: Harmloser Heartbeat-Ping -> Uebersprungen mit 'continue'.")
+        continue
+
+    print(f"Event #{current_event_id}: Kritisches Auth-Event analysiert und gespeichert.")
+
+print("Warteschlange komplett abgearbeitet.")
