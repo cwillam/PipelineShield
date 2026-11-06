@@ -43,3 +43,27 @@ if active_nodes == 0:
 else:
     load_per_node = incoming_traffic / active_nodes
     print(f"Traffic pro Knoten: {load_per_node:.2f}")
+
+
+# --- Authentication & Role-Based Access Control ---
+user_role: str = "security_officer"
+failed_login_attempts: int = 2
+is_account_locked: bool = False
+
+if is_account_locked or failed_login_attempts >= 5:
+    print("Access Denied: Account is locked due to security policy.")
+elif user_role == "admin" or user_role == "security_officer":
+    print(f"Access Granted: Elevated privileges assigned to role '{user_role}'.")
+elif user_role == "user" and not is_account_locked:
+    print("Access Granted: Standard user access.")
+else:
+    print("Access Denied: Unknown role or insufficient permissions.")
+
+
+# --- Token Presence Check (Truthy & Falsy) ---
+raw_magic_token: str = ""  # Leerer String ist "Falsy"!
+
+if not raw_magic_token:
+    print("Security Warning: Kein Athentifizierungs-Token übergeben (Falsy erkannt).")
+else:
+    print(f"Token empfangen: {raw_magic_token} (Truthy erkannt).")
